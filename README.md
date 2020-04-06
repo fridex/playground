@@ -16,3 +16,13 @@ To build them, clone the repo and run:
  cd torch-matmul/
  podman build . -t quay.io/fridex/tensorflow-matmul
 ```
+
+## To run in OpenShift
+
+```
+oc process -f job-template.yaml -p IMAGE="quay.io/fridex/torch-matmul:latest" -p CPU=1 -p MEMORY=1Gi | oc apply -f -
+```
+
+```
+oc process -f job-template.yaml -p IMAGE="quay.io/fridex/tensorflow-matmul:latest" -p CPU=1 -p MEMORY=1Gi | oc apply -f -
+```
