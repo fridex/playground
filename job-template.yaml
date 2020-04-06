@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: playground
+  labels:
+    app: playground
+
+parameters:
+  - description: Registry the ImageStream to be use lives in
+    displayName: ImageStream Registry
+    required: true
+    name: IMAGE
+    value: "quay.io/fridex/torch-matmul:latest"
+
+  - description: Job identifier to be generated to distinguish multiple submissions.
+    from: '[a-z0-9]{4}'
+    generate: expression
+    name: IDENTIFIER
+
+  - description: Number of CPUs to assign.
+    name: CPU
+    value: "1"
+
+  - description: Memory to be assigned.
+    name: MEMORY
+    value: "1Gi"
+
+objects:
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "playground-${IDENTIFIER}"
+      labels:
+        app: playground
+    spec:
+      template:
+        metadata:
+          labels:
+            app: playground
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: playground
+              image: "${IMAGE}"
+              resources:
+                limits:
+                  memory: "${MEMORY}"
+                  cpu: "${CPU}"
+                requests:
+                  memory: "${MEMORY}"
+                  cpu: "${CPU}"
