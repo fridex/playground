@@ -25,6 +25,10 @@ parameters:
     name: MEMORY
     value: "1Gi"
 
+  - description: Number of repetitions for Matrix multiplication.
+    name: MATMUL_REPS
+    value: "8000"
+
 objects:
   - apiVersion: batch/v1
     kind: Job
@@ -42,6 +46,9 @@ objects:
           containers:
             - name: playground
               image: "${IMAGE}"
+              env:
+              - name: MATMUL_REPS
+                value: "${MATMUL_REPS}"
               resources:
                 limits:
                   memory: "${MEMORY}"
